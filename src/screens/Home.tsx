@@ -7,7 +7,7 @@ import  auth  from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 
 
-import Logo from '../assets/logo_secondary.svg'
+import Logo from '../assets/Relp_2.svg'
 import { Filter } from '../components/Filter';
 import { Button } from '../components/Button';
 import { Order, OrderProps } from '../components/Order';
@@ -18,9 +18,7 @@ import { Loading } from '../components/Loading';
 export function Home() {
   const [isloading, setIsLoading] = useState(true);
   const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>('open')
-  const [orders, setOrders] = useState<OrderProps[]>([
- 
-  ])
+  const [orders, setOrders] = useState<OrderProps[]>([])
   
   const { colors} = useTheme();
   const navigation = useNavigation();
@@ -47,14 +45,15 @@ export function Home() {
     .where('status','==', statusSelected)
     .onSnapshot(snapshot => {
       const data = snapshot.docs.map(doc => {
-        const {asset, description, status, created_at} = doc.data();
+        const {asset, description, status, created_at, priority} = doc.data();
 
         return {
           id: doc.id,
           asset,
           description,
           status,
-          when: dateFormat(created_at)
+          when: dateFormat(created_at),
+          priority
         }
       })
       setOrders(data);

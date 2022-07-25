@@ -6,7 +6,7 @@ import auth from '@react-native-firebase/auth';
 
 
 
-import Logo from '../assets/logo_primary.svg';
+import Logo from '../assets/Relp_1.svg';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 
@@ -47,8 +47,6 @@ export function SignIn() {
       }
 
       return Alert.alert('Entrar', 'Não foi possível acessar')
-
-      //(error.code === 'auth/user-not-found') ? {return Alert.alert('Entrar, Usuário não cadastrado!')}
     })
   }
 
@@ -61,7 +59,7 @@ return(
   <Input placeholder="senha" mb={40} onChangeText={setPassword} secureTextEntry InputLeftElement={<Icon as={<Key color={colors.gray[300]} />} ml={4} />} />
 
   <Button title="Entrar" w="full" onPress={handleSignIn} isLoading={isLoading} />
-  </VStack>
 
+  </VStack>
   )
 }

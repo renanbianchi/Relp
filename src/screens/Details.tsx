@@ -2,7 +2,7 @@ import React, {useState, useEffect } from 'react';
 import { VStack, Text, HStack, useTheme, ScrollView, Box } from 'native-base';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore'
-import { CircleWavyCheck, Hourglass, DesktopTower, Clipboard, ClipboardText } from 'phosphor-react-native';
+import { CircleWavyCheck, Hourglass, DesktopTower, ClipboardText } from 'phosphor-react-native';
 
 
 import { Header } from '../components/Header';
@@ -23,6 +23,7 @@ type OrderDetails = OrderProps & {
   description: string;
   solution: string;
   closed: string;
+  priority: string;
 }
 
 export function Details() {
@@ -56,7 +57,7 @@ export function Details() {
     .doc(orderId)
     .get()
     .then((doc) => {
-      const { asset, description, status, created_at, closed_at, solution} = doc.data();
+      const { asset, description, status, created_at, closed_at, solution, priority} = doc.data();
 
       const closed = closed_at ? dateFormat(closed_at) : null;
 
@@ -67,7 +68,8 @@ export function Details() {
         status,
         solution,
         when: dateFormat(created_at),
-        closed
+        closed,
+        priority
       });
 
       console.log({
@@ -77,7 +79,8 @@ export function Details() {
         status,
         solution,
         when: dateFormat(created_at),
-        closed});
+        closed
+      });
 
       setIsLoading(false);
       })
@@ -100,9 +103,10 @@ export function Details() {
     </HStack>
     <ScrollView mx={5} showsVerticalScrollIndicator={false}>
       
-      <CardDetails title="equipamento" description={`Patrimônio ${order.asset}`} icon={DesktopTower} ></CardDetails>
+      <CardDetails title="equipamento" description={`${order.asset}`} icon={DesktopTower} ></CardDetails>
 
-      <CardDetails title="Descrição do Problema" description={order.description} icon={ClipboardText} footer={`registrado em ${order.when}`}></CardDetails>
+      <CardDetails title="Descrição do Problema" description={order.description} priority={`Prioridade: ${order.priority}`} icon={ClipboardText}  footer={`registrado em ${order.when}`}></CardDetails>
+
       
       <CardDetails title="Solução apresentada" icon={CircleWavyCheck} description={order.solution} footer={order.closed && `Encerrado em ${order.closed}`}>
       { order.status === "open" &&

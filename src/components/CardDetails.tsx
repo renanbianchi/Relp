@@ -6,6 +6,7 @@ import React from 'react';
 type Props = {
   title: string;
   description?: string;
+  priority?: string;
   footer?: string;
   icon: React.ElementType<IconProps>;
   children?: ReactNode;
@@ -17,7 +18,8 @@ export function CardDetails( {
   description,
   footer = null,
   icon: Icon, 
-  children
+  children,
+  priority
 
 } : Props) {
 
@@ -32,6 +34,7 @@ export function CardDetails( {
       </HStack>
 
           {!!description && <Text color="gray.100" fontSize="md">{description}</Text>}
+          {!!priority && <Text color="red.300" fontSize="md">{priority}</Text>}
           
           { children }
 

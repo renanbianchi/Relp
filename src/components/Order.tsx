@@ -8,12 +8,11 @@ export type OrderProps = {
   asset: string;
   when: string;
   status: 'open' | 'closed'
+  priority: 'low' | 'medium' | 'high'
 }
 
 type Props = IPressableProps & {
   data: OrderProps;
-
-
 }
 
 export function Order({data, ...rest}: Props) {

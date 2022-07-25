@@ -1,9 +1,10 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Alert } from 'react-native';
-import { VStack, Text } from 'native-base';
+import { VStack, Select, CheckIcon } from 'native-base';
 import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from 'native-base'
+
 
 import { Header } from '../components/Header';
 import { Input } from '../components/Input';
@@ -14,8 +15,11 @@ const [isLoading, setIsLoading] = useState(false);
 const [asset, setAsset] = useState('');
 const [description, setDescription] = useState ('');
 const navigation = useNavigation();
+const [priority, setPriority] = useState('')
+const colors = useTheme();
 
   function handleNewOrderRegister() {
+
     if(!asset || !description) {
       Alert.alert('Registrar', 'Preencha todos os campos.')
     }
@@ -25,7 +29,8 @@ const navigation = useNavigation();
     firestore().collection('orders').add({
       asset, 
       description, 
-      status: 'open', 
+      status: 'open',
+      priority,
       created_at: firestore.FieldValue.serverTimestamp()
     })
 
@@ -45,7 +50,7 @@ const navigation = useNavigation();
     <VStack flex={1} p={6} bg="gray.600">
     <Header title="Nova Solicitação" />
     <Input 
-    placeholder="Número do patrimônio" 
+    placeholder="Informações do patrimônio" 
     mt={4} 
     onChangeText={setAsset}
     />
@@ -58,6 +63,15 @@ const navigation = useNavigation();
       textAlignVertical="top"
       onChangeText={setDescription}
     />
+
+    <Select selectedValue={priority} placeholder="Escolha a prioridade do problema" mt={2} bg="gray.400" onValueChange={itemValue => setPriority(itemValue)} _selectedItem={{
+        bg: "gray.100" , endIcon: <CheckIcon size={5} />
+      }}>
+      <Select.Item label="Baixa" value="low" />
+      <Select.Item label="Média" value="medium" />
+      <Select.Item label="Alta" value="High" />
+    </Select>
+
     <Button 
       title="Cadastrar" 
       mt={5} 
