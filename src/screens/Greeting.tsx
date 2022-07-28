@@ -14,7 +14,7 @@ export function Greeting() {
 
     <Button title="Criar uma conta" mt={20} onPress={AppRoutes} w='full' />
 
-    <Button title="Já tenho uma conta" mt={20} onPress={} w='full' />
+    <Button title="Já tenho uma conta" mt={20} onPress={AppRoutes} w='full' />
     </VStack>
   );
 }
