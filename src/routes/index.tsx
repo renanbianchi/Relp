@@ -4,7 +4,7 @@ import {NavigationContainer} from '@react-navigation/native'
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth'
 
 
-import { SignIn } from '../screens/SignIn'
+import { Greeting } from '../screens/Greeting'
 import { AppRoutes } from './app.routes'
 
 export function Routes() {
@@ -27,7 +27,7 @@ export function Routes() {
 
   return (
     <NavigationContainer>
-      {user ? <AppRoutes /> : <SignIn />} 
+      {user ? <AppRoutes /> : <Greeting />} 
     </NavigationContainer>
   )
 }

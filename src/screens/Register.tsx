@@ -16,7 +16,7 @@ const [asset, setAsset] = useState('');
 const [description, setDescription] = useState ('');
 const navigation = useNavigation();
 const [priority, setPriority] = useState('')
-const colors = useTheme();
+
 
   function handleNewOrderRegister() {
 
@@ -67,9 +67,9 @@ const colors = useTheme();
     <Select selectedValue={priority} placeholder="Escolha a prioridade do problema" mt={2} bg="gray.400" onValueChange={itemValue => setPriority(itemValue)} _selectedItem={{
         bg: "gray.100" , endIcon: <CheckIcon size={5} />
       }}>
-      <Select.Item label="Baixa" value="low" />
-      <Select.Item label="Média" value="medium" />
-      <Select.Item label="Alta" value="High" />
+      <Select.Item label="Baixa" value="baixa" />
+      <Select.Item label="Média" value="média" />
+      <Select.Item label="Alta" value="alta" />
     </Select>
 
     <Button 

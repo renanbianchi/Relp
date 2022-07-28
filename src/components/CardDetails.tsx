@@ -22,19 +22,21 @@ export function CardDetails( {
   priority
 
 } : Props) {
-
   const {colors} = useTheme();
+
   return (
     <VStack bg='gray.600' padding={5} mt={5} rounded="sm" >
       <HStack alignItems="center" mb={4}>
-        <Icon color={colors.primary[700]} />
+        <Icon color={colors.gray[50]} />
         <Text ml={2} color="gray.300" fontSize="sm" textTransform="uppercase">
           {title}
         </Text>
       </HStack>
 
           {!!description && <Text color="gray.100" fontSize="md">{description}</Text>}
-          {!!priority && <Text color="red.300" fontSize="md">{priority}</Text>}
+          
+
+          {!!priority && <Text fontSize="md">{priority}</Text>}
           
           { children }
 

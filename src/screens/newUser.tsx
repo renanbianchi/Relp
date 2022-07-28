@@ -31,10 +31,6 @@ export function NewUser() {
       if(error.code === 'auth/email-already-in-use') {
         return Alert.alert('Cadastro', 'E-mail já cadastrado!')
       }
-
-      /* if(error.code === 'auth/email-already-in-use') {
-        return Alert.alert('Cadastro', 'E-mail já cadastrado!')
-      } */
       
       return Alert.alert('Cadastro', 'Não foi possível criar cadastro')
     })

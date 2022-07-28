@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "rockethelp",
-    "slug": "rockethelp",
+    "name": "relp",
+    "slug": "relp",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"

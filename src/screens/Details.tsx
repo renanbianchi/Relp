@@ -2,6 +2,7 @@ import React, {useState, useEffect } from 'react';
 import { VStack, Text, HStack, useTheme, ScrollView, Box } from 'native-base';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore'
+import auth from '@react-native-firebase/auth';
 import { CircleWavyCheck, Hourglass, DesktopTower, ClipboardText } from 'phosphor-react-native';
 
 
@@ -34,6 +35,7 @@ export function Details() {
   const { orderId } = route.params as RouteParams;
   const {colors} = useTheme();
   const navigation = useNavigation();
+  const userId = auth().currentUser.uid
   
   function handleOrderClose() {
     if(!solution) {
@@ -50,6 +52,7 @@ export function Details() {
       Alert.alert('Solicitação', 'Não foi possível encerrar a solicitação');
     })
   }
+  
 
   useEffect(() => {
     firestore()
@@ -73,13 +76,16 @@ export function Details() {
       });
 
       console.log({
+         
+        userId,
         id: doc.id,
         asset,
         description,
         status,
         solution,
         when: dateFormat(created_at),
-        closed
+        closed,
+        priority
       });
 
       setIsLoading(false);
@@ -93,26 +99,30 @@ export function Details() {
   return (
 
     <VStack flex={1} bg="gray.700">
-      <Box px={6} bg="gray.600" >
-    <Header title="solicitação" /> 
+      <Box px={5} bg="gray.600" >
+    <Header title="Solicitação"/> 
     </Box>
     <HStack bg="gray.500" justifyContent="center" p={4}>
       {order.status === 'closed' ? <CircleWavyCheck size={22} color={colors.green[300]} /> : <Hourglass size={22} color={colors.secondary[700]} />}
+      
       <Text fontSize="sm" color={order.status === 'closed' ? colors.green[300] : colors.secondary[700]} ml={2} textTransform="uppercase">{order.status === 'closed' ? 'Finalizado' : 'em andamento'} </Text>
+      
+      <Text fontSize="sm" color={order.status === 'closed' ? colors.green[300] : colors.secondary[700]} textTransform="uppercase">| prioridade:</Text>
+      
+      <Text color={order.priority === 'baixa' ? colors.green[300] : order.priority === 'média' ? colors.yellow[300] : colors.red[600]} fontSize='sm' ml={1} textTransform="uppercase">{order.priority}</Text>
 
     </HStack>
     <ScrollView mx={5} showsVerticalScrollIndicator={false}>
       
-      <CardDetails title="equipamento" description={`${order.asset}`} icon={DesktopTower} ></CardDetails>
+      <CardDetails title="Equipamento | Objeto | Patrimônio" description={`${order.asset}`} icon={DesktopTower} ></CardDetails>
 
-      <CardDetails title="Descrição do Problema" description={order.description} priority={`Prioridade: ${order.priority}`} icon={ClipboardText}  footer={`registrado em ${order.when}`}></CardDetails>
+      <CardDetails title="Descrição do Problema" description={order.description} icon={ClipboardText}  footer={`registrado em ${order.when}`}></CardDetails>
 
       
       <CardDetails title="Solução apresentada" icon={CircleWavyCheck} description={order.solution} footer={order.closed && `Encerrado em ${order.closed}`}>
-      { order.status === "open" &&
+      { (order.status === "open" && userId === "ZikI2M5od3hjgY1S7IAv9sCp3TH2"  ) && 
         
         <Input placeholder="descrição da solução" onChangeText={setSolution} bg="gray.600" h={24} textAlignVertical="top" multiline/>}
-
 
       </CardDetails>
     </ScrollView>

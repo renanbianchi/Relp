@@ -3,12 +3,13 @@ import { Box, HStack, Text, useTheme, VStack, Circle, Pressable, IPressableProps
 import {Hourglass, CircleWavyCheck, ClockAfternoon} from 'phosphor-react-native';
 
 
+
 export type OrderProps = {
   id: string;
   asset: string;
   when: string;
-  status: 'open' | 'closed'
-  priority: 'low' | 'medium' | 'high'
+  status: 'open' | 'closed';
+  priority: 'baixa' | 'média' | 'alta';
 }
 
 type Props = IPressableProps & {
@@ -18,6 +19,7 @@ type Props = IPressableProps & {
 export function Order({data, ...rest}: Props) {
   const {colors}= useTheme();
   const statusColor = data.status  === 'open' ? colors.secondary[700] : colors.green[300];
+  const priorityColor = data.priority === 'baixa' ? colors.green[300] : data.priority === "média" ? colors.yellow[300] : colors.red[600]
 
 
   return (
@@ -25,7 +27,8 @@ export function Order({data, ...rest}: Props) {
     <HStack bg="gray.600" mb={4} alignItems="center" justifyContent="space-between" rounded="sm" overflow="hidden">
       <Box h='full' w={5} bg={statusColor} />
      <VStack flex={1} my={5} ml={5}>
-      <Text color="white" fontSize="md">Patrimônio {data.asset}</Text>
+      <Text color="white" fontSize="lg">{data.asset}</Text>
+      <Text color={priorityColor} textTransform="uppercase" fontSize="sm">prioridade {data.priority} </Text>
       <HStack alignItems="center">
         <ClockAfternoon size={15} color={colors.gray[300]} />
         <Text color={colors.gray[200]} fontSize="xs" ml={1}>

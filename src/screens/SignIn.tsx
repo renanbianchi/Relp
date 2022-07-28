@@ -11,13 +11,12 @@ import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 
 
+
 export function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { colors } = useTheme();
-  
-
 
   
   function handleSignIn() {
@@ -25,7 +24,7 @@ export function SignIn() {
       return Alert.alert('Entrar', 'Informe e-mail e senha.')
     }
 
-    setIsLoading(true);
+    setIsLoading(false);
 
     auth()
     .signInWithEmailAndPassword(email, password)
@@ -56,9 +55,12 @@ return(
   <Heading color="gray.100" fontSize="xl" mt={20} mb={6}>Acessse sua conta</Heading>
 
   <Input placeholder="E-mail"  mb={4} onChangeText={setEmail} InputLeftElement={<Icon as={<Envelope color={colors.gray[300]} />} ml={4} />} />
-  <Input placeholder="senha" mb={40} onChangeText={setPassword} secureTextEntry InputLeftElement={<Icon as={<Key color={colors.gray[300]} />} ml={4} />} />
+  <Input placeholder="senha" mb={7} onChangeText={setPassword} secureTextEntry InputLeftElement={<Icon as={<Key color={colors.gray[300]} />} ml={4} />} />
 
-  <Button title="Entrar" w="full" onPress={handleSignIn} isLoading={isLoading} />
+  <Button title="ENTRAR" w='full' onPress={handleSignIn} isLoading={isLoading} />
+
+  <Button title="Esqueci minha senha" mt={1} bgColor='transparent' onPress={handleSignIn} w='full' isLoading={isLoading} />
+
 
   </VStack>
   )
