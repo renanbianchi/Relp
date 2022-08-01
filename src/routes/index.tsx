@@ -4,8 +4,9 @@ import {NavigationContainer} from '@react-navigation/native'
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth'
 
 
-import { Greeting } from '../screens/Greeting'
 import { AppRoutes } from './app.routes'
+import { Greeting } from '../screens/Greeting'
+import { Home } from '../screens/Home'
 
 export function Routes() {
   const [loading, setIsLoading] = useState(true);
@@ -24,10 +25,9 @@ export function Routes() {
       return <Loading />
   }
 
-
   return (
     <NavigationContainer>
-      {user ? <AppRoutes /> : <Greeting />} 
+      {user ? <Home /> : <AppRoutes/>} 
     </NavigationContainer>
   )
 }

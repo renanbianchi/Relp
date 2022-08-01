@@ -62,6 +62,9 @@ export function Home() {
       return subscriber;
 
   }, [statusSelected])
+
+ 
+
   return (
     <VStack flex={1} pb={6} bg="gray.700" >
       <HStack
@@ -85,7 +88,7 @@ export function Home() {
             <Text color="gray.200">{orders.length}</Text>
           </HStack>
           
-        <HStack space={3} mb={8}>
+        <HStack space={3} mb={8} size='sm'>
           <Filter type='open'
           title="em andamento"
           color="gray.100"
@@ -98,15 +101,13 @@ export function Home() {
           text-color="gray.100"
           onPress={()=>setStatusSelected('closed')}
           isActive={statusSelected === 'closed'} />
-
-
         </HStack>
         {
         isloading ? <Loading/> :
           <FlatList 
             data={orders}
             keyExtractor={item => item.id}
-            renderItem={({item})=> <Order data={item} onPress={()=>handleOpenDetails(item.id)} />}
+            renderItem={({item}) => <Order data={item} onPress={()=>handleOpenDetails(item.id)} />}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{paddingBottom: 50}}
             ListEmptyComponent={() => (
