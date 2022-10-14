@@ -7,6 +7,6 @@ export type OrderFirestoreDTO = {
   solution?: string
   created_at: FirebaseFirestoreTypes.Timestamp
   closed_at?: FirebaseFirestoreTypes.Timestamp
-  priority: 'baixa' | 'média' | 'alta'
+  priority: string
   userId?: string
 }

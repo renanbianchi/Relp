@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { VStack, Text, HStack, useTheme, ScrollView, Box } from 'native-base'
+import {
+  VStack,
+  Text,
+  HStack,
+  useTheme,
+  ScrollView,
+  Box,
+  Select,
+  CheckIcon
+} from 'native-base'
 import { useRoute } from '@react-navigation/native'
 import { navigationRef } from '../routes/RootNavigation'
 import firestore from '@react-native-firebase/firestore'
@@ -36,6 +45,7 @@ export function Details() {
   const admin = 'ZikI2M5od3hjgY1S7IAv9sCp3TH2'
   const [isLoading, setIsLoading] = useState(true)
   const [solution, setSolution] = useState('')
+  const [priority, setPriority] = useState('')
   const [order, setOrder] = useState<OrderDetails>({} as OrderDetails)
   const route = useRoute()
   const { orderId } = route.params as RouteParams
@@ -44,23 +54,22 @@ export function Details() {
   const userId = auth().currentUser.uid
 
   function handleOrderClose() {
-    if (!solution) {
-      return Alert.alert(
-        'Solicitação',
-        'Informe uma solução para encerrar a solicitação'
-      )
-    }
-
     firestore()
       .collection<OrderFirestoreDTO>('orders')
       .doc(orderId)
       .update({
-        status: 'closed',
+        status: solution === '' ? 'open' : 'closed',
+        priority,
         solution,
         closed_at: firestore.FieldValue.serverTimestamp()
       })
       .then(() => {
-        Alert.alert('Solicitação', 'Solicitação encerrada')
+        solution === ''
+          ? Alert.alert(
+              'Solicitação',
+              'Solicitação atualizada, porém continuará aberta até ser inserida uma solução!'
+            )
+          : Alert.alert('Solicitação', 'Solicitação encerrada')
         navigation.goBack()
       })
       .catch(error => {
@@ -173,6 +182,39 @@ export function Details() {
         </Text>
       </HStack>
       <ScrollView mx={5} showsVerticalScrollIndicator={false}>
+        {order.status === 'open' && userId === 'ZikI2M5od3hjgY1S7IAv9sCp3TH2' && (
+          <CardDetails
+            title="Alterar prioridade"
+            description={`${order.priority}`}
+            icon={DesktopTower}
+          >
+            <Select
+              selectedValue={priority}
+              placeholder="Alterar a prioridade do problema"
+              mt={2}
+              bg="gray.400"
+              color={
+                priority === 'baixa'
+                  ? 'green.300'
+                  : priority === 'média'
+                  ? 'yellow.300'
+                  : priority === 'alta'
+                  ? 'red.600'
+                  : 'white'
+              }
+              onValueChange={itemValue => setPriority(itemValue)}
+              _selectedItem={{
+                bg: 'gray.100',
+                endIcon: <CheckIcon size={5} />
+              }}
+            >
+              <Select.Item label="Baixa" value="baixa" />
+              <Select.Item label="Média" value="média" />
+              <Select.Item label="Alta" value="alta" />
+            </Select>
+          </CardDetails>
+        )}
+
         <CardDetails
           title="Equipamento | Objeto | Patrimônio"
           description={`${order.asset}`}
@@ -189,13 +231,17 @@ export function Details() {
         <CardDetails
           title="Solução apresentada"
           icon={CircleWavyCheck}
-          description={order.solution}
+          description={
+            order.solution
+              ? order.solution
+              : 'Ainda não foi apresentada uma solução para sua requisição. Por favor, aguarde a resposta do suporte'
+          }
           footer={order.closed && `Encerrado em ${order.closed}`}
         >
           {order.status === 'open' &&
             userId === 'ZikI2M5od3hjgY1S7IAv9sCp3TH2' && (
               <Input
-                placeholder="Ainda não foi apresentada uma solução para sua requisição. Por favor, aguarde a resposta do suporte"
+                placeholder="Insira aqui a solução para o problema"
                 onChangeText={setSolution}
                 bg="gray.600"
                 h={24}
@@ -206,7 +252,13 @@ export function Details() {
         </CardDetails>
       </ScrollView>
       {order.status === 'open' && userId === admin ? (
-        <Button title="Encerrar solicitação" m={5} onPress={handleOrderClose} />
+        <Button
+          title={
+            solution === '' ? 'Atualizar solicitação' : 'Encerrar solicitação'
+          }
+          m={5}
+          onPress={handleOrderClose}
+        />
       ) : null}
     </VStack>
   )

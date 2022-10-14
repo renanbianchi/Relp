@@ -20,7 +20,7 @@ export type OrderProps = {
   asset: string
   when: string
   status: 'open' | 'closed'
-  priority: 'baixa' | 'média' | 'alta'
+  priority: string
   userId: string
 }
 

@@ -8,12 +8,14 @@ import auth from '@react-native-firebase/auth'
 import { Header } from '../components/Header'
 import { Input } from '../components/Input'
 import { Button } from '../components/Button'
+import { Selector } from '../components/Selector'
 
 export function Register() {
+  const [priority, setPriority] = useState('baixa')
   const [isLoading, setIsLoading] = useState(false)
   const [asset, setAsset] = useState('')
   const [description, setDescription] = useState('')
-  const [priority, setPriority] = useState('')
+
   const navigation = navigationRef
   const currentUser = auth().currentUser.uid
 
@@ -63,8 +65,7 @@ export function Register() {
         textAlignVertical="top"
         onChangeText={setDescription}
       />
-
-      <Select 
+      <Select
         selectedValue={priority}
         placeholder="Escolha a prioridade do problema"
         mt={2}
@@ -88,6 +89,8 @@ export function Register() {
         <Select.Item label="Média" value="média" />
         <Select.Item label="Alta" value="alta" />
       </Select>
+
+      {/* <Selector /> */}
 
       <Button
         title="Cadastrar"
