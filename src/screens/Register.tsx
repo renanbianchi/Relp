@@ -64,11 +64,20 @@ export function Register() {
         onChangeText={setDescription}
       />
 
-      <Select
+      <Select 
         selectedValue={priority}
         placeholder="Escolha a prioridade do problema"
         mt={2}
         bg="gray.400"
+        color={
+          priority === 'baixa'
+            ? 'green.300'
+            : priority === 'média'
+            ? 'yellow.300'
+            : priority === 'alta'
+            ? 'red.600'
+            : 'white'
+        }
         onValueChange={itemValue => setPriority(itemValue)}
         _selectedItem={{
           bg: 'gray.100',
