@@ -9,4 +9,5 @@ export type OrderFirestoreDTO = {
   closed_at?: FirebaseFirestoreTypes.Timestamp
   priority: string
   userId?: string
+  createdBy?: string
 }

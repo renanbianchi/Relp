@@ -23,13 +23,14 @@ import { dateFormat } from '../utils/firestoreDateFormat'
 import { Loading } from '../components/Loading'
 
 export function Home() {
+  const userName = auth().currentUser.displayName
   const [orders, setOrders] = useState<OrderProps[]>([])
   const navigation = navigationRef
   const currentUser = auth().currentUser.uid
   const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>(
     'open'
   )
-  let isAdmin = currentUser === 'ZikI2M5od3hjgY1S7IAv9sCp3TH2'
+  const isAdmin = currentUser === 'ZikI2M5od3hjgY1S7IAv9sCp3TH2'
   const [isloading, setIsLoading] = useState(true)
 
   const { colors } = useTheme()
@@ -66,8 +67,15 @@ export function Home() {
 
     const subscriber = fetch.onSnapshot(snapshot => {
       const data = snapshot.docs.map(doc => {
-        const { asset, description, status, created_at, priority, userId } =
-          doc.data()
+        const {
+          asset,
+          description,
+          status,
+          created_at,
+          priority,
+          userId,
+          createdBy
+        } = doc.data()
 
         return {
           id: doc.id,
@@ -76,7 +84,8 @@ export function Home() {
           status,
           when: dateFormat(created_at),
           priority,
-          userId
+          userId,
+          createdBy
         }
       })
       setOrders(data)
@@ -149,7 +158,9 @@ export function Home() {
                 <Text color="gray.300" fontSize="xl" mt={6} textAlign="center">
                   {' '}
                   Você ainda não possui {'\n'} Solicitações{' '}
-                  {statusSelected === 'open' ? 'em andamento' : 'finalizadas'}{' '}
+                  {statusSelected === 'open'
+                    ? `em andamento, ${userName}`
+                    : 'finalizadas'}{' '}
                 </Text>
               </Center>
             )}

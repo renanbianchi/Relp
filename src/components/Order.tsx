@@ -22,6 +22,7 @@ export type OrderProps = {
   status: 'open' | 'closed'
   priority: string
   userId: string
+  createdBy: string
 }
 
 type Props = IPressableProps & {
@@ -51,6 +52,11 @@ export function Order({ data, ...rest }: Props) {
       >
         <Box h="full" w={5} bg={statusColor} />
         <VStack flex={1} my={5} ml={5}>
+          {/* {auth().currentUser.uid === 'ZikI2M5od3hjgY1S7IAv9sCp3TH2' ? ( */}
+          <Text color="white" fontSize="sm">
+            Solicitante: {data.createdBy}
+          </Text>
+          {/* ) : null} */}
           <Text color="white" fontSize="lg">
             {data.asset}
           </Text>
@@ -74,4 +80,7 @@ export function Order({ data, ...rest }: Props) {
       </HStack>
     </Pressable>
   )
+}
+function auth() {
+  throw new Error('Function not implemented.')
 }

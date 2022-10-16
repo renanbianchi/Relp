@@ -92,7 +92,8 @@ export function Details() {
           closed_at,
           solution,
           priority,
-          userId
+          userId,
+          createdBy
         } = doc.data()
 
         const closed = closed_at ? dateFormat(closed_at) : null
@@ -106,7 +107,8 @@ export function Details() {
           solution,
           when: dateFormat(created_at),
           closed,
-          priority
+          priority,
+          createdBy
         })
 
         console.log({
@@ -234,6 +236,8 @@ export function Details() {
           description={
             order.solution
               ? order.solution
+              : userId === admin
+              ? null
               : 'Ainda não foi apresentada uma solução para sua requisição. Por favor, aguarde a resposta do suporte'
           }
           footer={order.closed && `Encerrado em ${order.closed}`}

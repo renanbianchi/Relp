@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
-import { Alert } from 'react-native'
-import { VStack, Heading, Icon, useTheme } from 'native-base'
+import {
+  Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback
+} from 'react-native'
+import { VStack, Heading, Icon, useTheme, Flex } from 'native-base'
 import { Envelope, Key } from 'phosphor-react-native'
 import auth from '@react-native-firebase/auth'
 
@@ -47,36 +53,50 @@ export function SignIn({ navigation }) {
   }
 
   return (
-    <VStack flex={1} alignItems="center" bg="gray.800" px={8} pt={24}>
-      <Logo />
-      <Heading color="gray.100" fontSize="xl" mt={20} mb={6}>
-        Acesse sua conta
-      </Heading>
-
-      <Input
-        placeholder="E-mail"
-        isDisabled={isLoading}
-        mb={4}
-        onChangeText={setEmail}
-        InputLeftElement={
-          <Icon as={<Envelope color={colors.gray[300]} />} ml={4} />
-        }
-      />
-      <Input
-        placeholder="senha"
-        isDisabled={isLoading}
-        mb={7}
-        onChangeText={setPassword}
-        secureTextEntry
-        InputLeftElement={<Icon as={<Key color={colors.gray[300]} />} ml={4} />}
-      />
-
-      <Button
-        title="ENTRAR"
-        w="full"
-        onPress={handleSignIn}
-        isLoading={isLoading}
-      />
-    </VStack>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{
+          backgroundColor: '#202024',
+          flex: 1,
+          alignItems: 'center',
+          paddingHorizontal: 20,
+          justifyContent: 'center',
+          marginBottom: 0
+        }}
+      >
+        <Logo />
+        <Heading color="gray.100" fontSize="xl" mt={'10'} mb={6}>
+          Acesse sua conta
+        </Heading>
+        <Input
+          placeholder="E-mail"
+          isDisabled={isLoading}
+          mb={4}
+          height={4}
+          onChangeText={setEmail}
+          InputLeftElement={
+            <Icon as={<Envelope color={colors.gray[300]} />} ml={4} />
+          }
+        />
+        <Input
+          placeholder="senha"
+          isDisabled={isLoading}
+          mb={7}
+          onChangeText={setPassword}
+          secureTextEntry
+          InputLeftElement={
+            <Icon as={<Key color={colors.gray[300]} />} ml={4} />
+          }
+        />
+        <Button
+          title="ENTRAR"
+          h={14}
+          w={'full'}
+          onPress={handleSignIn}
+          isLoading={isLoading}
+        />
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   )
 }

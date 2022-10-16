@@ -1,8 +1,14 @@
 import React, { useState } from 'react'
-import { Alert } from 'react-native'
-import { VStack, useTheme, Heading, Icon } from 'native-base'
+import {
+  Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback
+} from 'react-native'
+import { useTheme, Heading, Icon } from 'native-base'
 import auth from '@react-native-firebase/auth'
-import { Envelope, Key } from 'phosphor-react-native'
+import { Envelope, Key, IdentificationCard } from 'phosphor-react-native'
 import { Button } from '../components/Button'
 import { Input } from '../components/Input'
 import Logo from '../assets/Relp_1.svg'
@@ -13,6 +19,7 @@ export function NewUser() {
   const { colors } = useTheme()
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
+  const [name, setName] = useState('')
   const [password, setPassword] = useState('')
   const [password2, setPassword2] = useState('')
 
@@ -25,7 +32,9 @@ export function NewUser() {
     }
 
     try {
+      setIsLoading(true)
       await auth().createUserWithEmailAndPassword(email, password)
+      await auth().currentUser.updateProfile({ displayName: name })
       Alert.alert(
         'Sucesso!',
         'Cadastro efetuado com sucesso! Efetue o login na tela principal com seu usuário recém-criado'
@@ -40,41 +49,67 @@ export function NewUser() {
   }
 
   return (
-    <VStack flex={1} alignItems="center" bg="gray.800" px={8} pt={24}>
-      <Logo />
-      <Heading color="gray.100" fontSize="xl" mt={20} mb={6}>
-        Registre seu usuário
-      </Heading>
+    /* <VStack flex={1} alignItems="center" bg="gray.800" px={8} pt={24}> */
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{
+          backgroundColor: '#202024',
+          flex: 1,
+          alignItems: 'center',
+          paddingHorizontal: 20,
+          justifyContent: 'center',
+          marginBottom: 0
+        }}
+      >
+        <Logo />
+        <Heading color="gray.100" fontSize="xl" mt={20} mb={6}>
+          Registre seu usuário
+        </Heading>
 
-      <Input
-        placeholder="E-mail"
-        mb={12}
-        onChangeText={setEmail}
-        InputLeftElement={
-          <Icon as={<Envelope color={colors.gray[300]} />} ml={4} />
-        }
-      />
-      <Input
-        placeholder="senha"
-        mb={4}
-        onChangeText={setPassword}
-        secureTextEntry
-        InputLeftElement={<Icon as={<Key color={colors.gray[300]} />} ml={4} />}
-      />
-      <Input
-        placeholder="confirme sua senha"
-        mb={24}
-        onChangeText={setPassword2}
-        secureTextEntry
-        InputLeftElement={<Icon as={<Key color={colors.gray[300]} />} ml={4} />}
-      />
+        <Input
+          placeholder="Nome de Usuário"
+          mb={4}
+          onChangeText={setName}
+          InputLeftElement={
+            <Icon as={<IdentificationCard color={colors.gray[300]} />} ml={4} />
+          }
+        />
+        <Input
+          placeholder="E-mail"
+          mb={12}
+          onChangeText={setEmail}
+          InputLeftElement={
+            <Icon as={<Envelope color={colors.gray[300]} />} ml={4} />
+          }
+        />
+        <Input
+          placeholder="senha"
+          mb={4}
+          onChangeText={setPassword}
+          secureTextEntry
+          InputLeftElement={
+            <Icon as={<Key color={colors.gray[300]} />} ml={4} />
+          }
+        />
+        <Input
+          placeholder="confirme sua senha"
+          mb={24}
+          onChangeText={setPassword2}
+          secureTextEntry
+          InputLeftElement={
+            <Icon as={<Key color={colors.gray[300]} />} ml={4} />
+          }
+        />
 
-      <Button
-        title="Criar cadastro"
-        w="full"
-        onPress={handleNewUser}
-        isLoading={isLoading}
-      />
-    </VStack>
+        <Button
+          title="Criar cadastro"
+          w="full"
+          onPress={handleNewUser}
+          isLoading={isLoading}
+        />
+        {/* </VStack> */}
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   )
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Alert } from 'react-native'
+import { Alert, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import { VStack, Select, CheckIcon } from 'native-base'
 import firestore from '@react-native-firebase/firestore'
 import { navigationRef } from '../routes/RootNavigation'
@@ -18,6 +18,7 @@ export function Register() {
 
   const navigation = navigationRef
   const currentUser = auth().currentUser.uid
+  const userName = auth().currentUser.displayName
 
   function handleNewOrderRegister() {
     if (!asset || !description) {
@@ -34,6 +35,7 @@ export function Register() {
         status: 'open',
         priority,
         userId: currentUser,
+        createdBy: userName,
         created_at: firestore.FieldValue.serverTimestamp()
       })
 
@@ -49,55 +51,57 @@ export function Register() {
   }
 
   return (
-    <VStack flex={1} p={6} bg="gray.600">
-      <Header title="Nova Solicitação" />
-      <Input
-        placeholder="Informações do patrimônio"
-        mt={4}
-        onChangeText={setAsset}
-      />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <VStack flex={1} p={6} bg="gray.600">
+        <Header title="Nova Solicitação" />
+        <Input
+          placeholder="Informações do patrimônio"
+          mt={4}
+          onChangeText={setAsset}
+        />
+        <Input
+          placeholder="Descrição do problema"
+          mt={5}
+          h={80}
+          multiline
+          textAlignVertical="top"
+          onChangeText={setDescription}
+        />
 
-      <Input
-        placeholder="Descrição do problema"
-        mt={5}
-        flex={1}
-        multiline
-        textAlignVertical="top"
-        onChangeText={setDescription}
-      />
-      <Select
-        selectedValue={priority}
-        placeholder="Escolha a prioridade do problema"
-        mt={2}
-        bg="gray.400"
-        color={
-          priority === 'baixa'
-            ? 'green.300'
-            : priority === 'média'
-            ? 'yellow.300'
-            : priority === 'alta'
-            ? 'red.600'
-            : 'white'
-        }
-        onValueChange={itemValue => setPriority(itemValue)}
-        _selectedItem={{
-          bg: 'gray.100',
-          endIcon: <CheckIcon size={5} />
-        }}
-      >
-        <Select.Item label="Baixa" value="baixa" />
-        <Select.Item label="Média" value="média" />
-        <Select.Item label="Alta" value="alta" />
-      </Select>
+        <Select
+          selectedValue={priority}
+          placeholder="Escolha a prioridade do problema"
+          mt={2}
+          bg="gray.400"
+          color={
+            priority === 'baixa'
+              ? 'green.300'
+              : priority === 'média'
+              ? 'yellow.300'
+              : priority === 'alta'
+              ? 'red.600'
+              : 'white'
+          }
+          onValueChange={itemValue => setPriority(itemValue)}
+          _selectedItem={{
+            bg: 'gray.100',
+            endIcon: <CheckIcon size={5} />
+          }}
+        >
+          <Select.Item label="Baixa" value="baixa" />
+          <Select.Item label="Média" value="média" />
+          <Select.Item label="Alta" value="alta" />
+        </Select>
 
-      {/* <Selector /> */}
+        {/* <Selector /> */}
 
-      <Button
-        title="Cadastrar"
-        mt={5}
-        isLoading={isLoading}
-        onPress={handleNewOrderRegister}
-      />
-    </VStack>
+        <Button
+          title="Cadastrar"
+          mt={5}
+          isLoading={isLoading}
+          onPress={handleNewOrderRegister}
+        />
+      </VStack>
+    </TouchableWithoutFeedback>
   )
 }

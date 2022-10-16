@@ -231,10 +231,10 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file('debug.keystore')
-            storePassword 'android'
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
+            storeFile file('relp-key.keystore')
+            storePassword 'RelpMeRenan2236#!'
+            keyAlias 'key'
+            keyPassword 'RelpMeRenan2236#!'
         }
     }
     buildTypes {
