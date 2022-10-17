@@ -42,7 +42,7 @@ type OrderDetails = OrderProps & {
 }
 
 export function Details() {
-  const admin = 'ZikI2M5od3hjgY1S7IAv9sCp3TH2'
+  const isAdmin = auth().currentUser.uid === 'ZikI2M5od3hjgY1S7IAv9sCp3TH2'
   const [isLoading, setIsLoading] = useState(true)
   const [solution, setSolution] = useState('')
   const [priority, setPriority] = useState('')
@@ -51,7 +51,6 @@ export function Details() {
   const { orderId } = route.params as RouteParams
   const { colors } = useTheme()
   const navigation = navigationRef
-  const userId = auth().currentUser.uid
 
   function handleOrderClose() {
     firestore()
@@ -109,18 +108,6 @@ export function Details() {
           closed,
           priority,
           createdBy
-        })
-
-        console.log({
-          userId,
-          id: doc.id,
-          asset,
-          description,
-          status,
-          solution,
-          when: dateFormat(created_at),
-          closed,
-          priority
         })
 
         setIsLoading(false)
@@ -184,7 +171,7 @@ export function Details() {
         </Text>
       </HStack>
       <ScrollView mx={5} showsVerticalScrollIndicator={false}>
-        {order.status === 'open' && userId === 'ZikI2M5od3hjgY1S7IAv9sCp3TH2' && (
+        {order.status === 'open' && isAdmin ? (
           <CardDetails
             title="Alterar prioridade"
             description={`${order.priority}`}
@@ -215,7 +202,7 @@ export function Details() {
               <Select.Item label="Alta" value="alta" />
             </Select>
           </CardDetails>
-        )}
+        ) : null}
 
         <CardDetails
           title="Equipamento | Objeto | Patrimônio"
@@ -236,26 +223,25 @@ export function Details() {
           description={
             order.solution
               ? order.solution
-              : userId === admin
+              : isAdmin
               ? null
               : 'Ainda não foi apresentada uma solução para sua requisição. Por favor, aguarde a resposta do suporte'
           }
           footer={order.closed && `Encerrado em ${order.closed}`}
         >
-          {order.status === 'open' &&
-            userId === 'ZikI2M5od3hjgY1S7IAv9sCp3TH2' && (
-              <Input
-                placeholder="Insira aqui a solução para o problema"
-                onChangeText={setSolution}
-                bg="gray.600"
-                h={24}
-                textAlignVertical="top"
-                multiline
-              />
-            )}
+          {order.status === 'open' && isAdmin ? (
+            <Input
+              placeholder="Insira aqui a solução para o problema"
+              onChangeText={setSolution}
+              bg="gray.600"
+              h={24}
+              textAlignVertical="top"
+              multiline
+            />
+          ) : null}
         </CardDetails>
       </ScrollView>
-      {order.status === 'open' && userId === admin ? (
+      {order.status === 'open' && isAdmin ? (
         <Button
           title={
             solution === '' ? 'Atualizar solicitação' : 'Encerrar solicitação'

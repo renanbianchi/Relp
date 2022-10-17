@@ -6,7 +6,7 @@ import {
   Platform,
   TouchableWithoutFeedback
 } from 'react-native'
-import { VStack, Heading, Icon, useTheme, Flex } from 'native-base'
+import { Heading, Icon, useTheme } from 'native-base'
 import { Envelope, Key } from 'phosphor-react-native'
 import auth from '@react-native-firebase/auth'
 

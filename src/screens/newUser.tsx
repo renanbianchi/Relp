@@ -49,7 +49,6 @@ export function NewUser() {
   }
 
   return (
-    /* <VStack flex={1} alignItems="center" bg="gray.800" px={8} pt={24}> */
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -71,22 +70,28 @@ export function NewUser() {
           placeholder="Nome de Usuário"
           mb={4}
           onChangeText={setName}
+          isDisabled={isLoading}
           InputLeftElement={
             <Icon as={<IdentificationCard color={colors.gray[300]} />} ml={4} />
           }
         />
         <Input
           placeholder="E-mail"
-          mb={12}
+          mb={6}
           onChangeText={setEmail}
+          isDisabled={isLoading}
           InputLeftElement={
             <Icon as={<Envelope color={colors.gray[300]} />} ml={4} />
           }
         />
+        <Heading color="gray.100" fontSize="xl" mt={0} mb={6}>
+          Insira sua senha
+        </Heading>
         <Input
           placeholder="senha"
           mb={4}
           onChangeText={setPassword}
+          isDisabled={isLoading}
           secureTextEntry
           InputLeftElement={
             <Icon as={<Key color={colors.gray[300]} />} ml={4} />
@@ -96,6 +101,7 @@ export function NewUser() {
           placeholder="confirme sua senha"
           mb={24}
           onChangeText={setPassword2}
+          isDisabled={isLoading}
           secureTextEntry
           InputLeftElement={
             <Icon as={<Key color={colors.gray[300]} />} ml={4} />

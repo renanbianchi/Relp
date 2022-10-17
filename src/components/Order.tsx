@@ -81,6 +81,3 @@ export function Order({ data, ...rest }: Props) {
     </Pressable>
   )
 }
-function auth() {
-  throw new Error('Function not implemented.')
-}

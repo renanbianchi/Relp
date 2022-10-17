@@ -30,7 +30,7 @@ export function Home() {
   const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>(
     'open'
   )
-  const isAdmin = currentUser === 'ZikI2M5od3hjgY1S7IAv9sCp3TH2'
+  const isAdmin = auth().currentUser.uid === 'ZikI2M5od3hjgY1S7IAv9sCp3TH2'
   const [isloading, setIsLoading] = useState(true)
 
   const { colors } = useTheme()
