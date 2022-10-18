@@ -9,6 +9,8 @@ import {
 import { useTheme, Heading, Icon } from 'native-base'
 import auth from '@react-native-firebase/auth'
 import { Envelope, Key, IdentificationCard } from 'phosphor-react-native'
+
+import { useRegisterUser } from '../Hooks/useRegisterUser'
 import { Button } from '../components/Button'
 import { Input } from '../components/Input'
 import Logo from '../assets/Relp_1.svg'
@@ -31,7 +33,9 @@ export function NewUser() {
       return Alert.alert('Senha', 'As senhas devem ser iguais.')
     }
 
-    try {
+    useRegisterUser(email, password, name, setIsLoading)
+
+    /* try {
       setIsLoading(true)
       await auth().createUserWithEmailAndPassword(email, password)
       await auth().currentUser.updateProfile({ displayName: name })
@@ -45,7 +49,7 @@ export function NewUser() {
       if (e.code === 'auth/email-already-in-use')
         Alert.alert('Cadastro', 'E-mail já cadastrado!')
       else Alert.alert('Cadastro', 'Não foi possível criar cadastro')
-    }
+    } */
   }
 
   return (
@@ -60,9 +64,10 @@ export function NewUser() {
           justifyContent: 'center',
           marginBottom: 0
         }}
+        keyboardVerticalOffset={50}
       >
-        <Logo />
-        <Heading color="gray.100" fontSize="xl" mt={20} mb={6}>
+        <Logo width={110} height={110} />
+        <Heading color="gray.100" fontSize="xl" mt={10} mb={6}>
           Registre seu usuário
         </Heading>
 
@@ -77,16 +82,14 @@ export function NewUser() {
         />
         <Input
           placeholder="E-mail"
-          mb={6}
+          mb={4}
           onChangeText={setEmail}
           isDisabled={isLoading}
           InputLeftElement={
             <Icon as={<Envelope color={colors.gray[300]} />} ml={4} />
           }
         />
-        <Heading color="gray.100" fontSize="xl" mt={0} mb={6}>
-          Insira sua senha
-        </Heading>
+
         <Input
           placeholder="senha"
           mb={4}

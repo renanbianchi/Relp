@@ -6,7 +6,7 @@ import {
   Platform,
   TouchableWithoutFeedback
 } from 'react-native'
-import { Heading, Icon, useTheme } from 'native-base'
+import { Heading, Icon, useTheme, VStack } from 'native-base'
 import { Envelope, Key } from 'phosphor-react-native'
 import auth from '@react-native-firebase/auth'
 
@@ -65,8 +65,8 @@ export function SignIn({ navigation }) {
           marginBottom: 0
         }}
       >
-        <Logo />
-        <Heading color="gray.100" fontSize="xl" mt={'10'} mb={6}>
+        <Logo width={110} height={110} />
+        <Heading color="gray.100" fontSize="xl" mt={'3'} mb={6}>
           Acesse sua conta
         </Heading>
         <Input

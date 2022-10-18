@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
 import { Select, CheckIcon } from 'native-base'
 
-export function Selector() {
-  const [priority, setPriority] = useState(`baixa`)
+type Props = {
+  priority: string
+  setPriority: React.Dispatch<React.SetStateAction<string>>
+}
+
+export function Selector({ priority, setPriority }: Props) {
   return (
     <Select
       placeholder="Escolha a prioridade do problema"

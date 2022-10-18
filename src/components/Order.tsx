@@ -27,9 +27,10 @@ export type OrderProps = {
 
 type Props = IPressableProps & {
   data: OrderProps
+  isAdmin: boolean
 }
 
-export function Order({ data, ...rest }: Props) {
+export function Order({ data, isAdmin, ...rest }: Props) {
   const { colors } = useTheme()
   const statusColor =
     data.status === 'open' ? colors.secondary[700] : colors.green[300]
@@ -52,17 +53,17 @@ export function Order({ data, ...rest }: Props) {
       >
         <Box h="full" w={5} bg={statusColor} />
         <VStack flex={1} my={5} ml={5}>
-          {/* {auth().currentUser.uid === 'ZikI2M5od3hjgY1S7IAv9sCp3TH2' ? ( */}
-          <Text color="white" fontSize="sm">
-            Solicitante: {data.createdBy}
-          </Text>
-          {/* ) : null} */}
           <Text color="white" fontSize="lg">
             {data.asset}
           </Text>
           <Text color={priorityColor} textTransform="uppercase" fontSize="sm">
             prioridade {data.priority}{' '}
           </Text>
+          {isAdmin ? (
+            <Text color="white" fontSize="sm">
+              Solicitante: {data.createdBy}
+            </Text>
+          ) : null}
           <HStack alignItems="center">
             <ClockAfternoon size={15} color={colors.gray[300]} />
             <Text color={colors.gray[200]} fontSize="xs" ml={1}>

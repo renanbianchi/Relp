@@ -24,13 +24,12 @@ import { Loading } from '../components/Loading'
 
 export function Home() {
   const userName = auth().currentUser.displayName
-  const [orders, setOrders] = useState<OrderProps[]>([])
+  const isAdmin = auth().currentUser.uid === 'ZikI2M5od3hjgY1S7IAv9sCp3TH2'
   const navigation = navigationRef
-  const currentUser = auth().currentUser.uid
+  const [orders, setOrders] = useState<OrderProps[]>([])
   const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>(
     'open'
   )
-  const isAdmin = auth().currentUser.uid === 'ZikI2M5od3hjgY1S7IAv9sCp3TH2'
   const [isloading, setIsLoading] = useState(true)
 
   const { colors } = useTheme()
@@ -40,7 +39,7 @@ export function Home() {
     ? db.where('status', '==', statusSelected)
     : db
         .where('status', '==', statusSelected)
-        .where('userId', '==', currentUser)
+        .where('userId', '==', auth().currentUser.uid)
 
   function handleNewOrder() {
     navigation.navigate('new')
@@ -74,7 +73,8 @@ export function Home() {
           created_at,
           priority,
           userId,
-          createdBy
+          createdBy,
+          isAdmin
         } = doc.data()
 
         return {
@@ -85,7 +85,8 @@ export function Home() {
           when: dateFormat(created_at),
           priority,
           userId,
-          createdBy
+          createdBy,
+          isAdmin
         }
       })
       setOrders(data)
@@ -148,7 +149,11 @@ export function Home() {
             data={orders}
             keyExtractor={item => item.id}
             renderItem={({ item }) => (
-              <Order data={item} onPress={() => handleOpenDetails(item.id)} />
+              <Order
+                isAdmin={isAdmin}
+                data={item}
+                onPress={() => handleOpenDetails(item.id)}
+              />
             )}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 50 }}
