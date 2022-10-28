@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Alert,
   Keyboard,
@@ -7,17 +7,16 @@ import {
   TouchableWithoutFeedback
 } from 'react-native'
 import { useTheme, Heading, Icon } from 'native-base'
-import auth from '@react-native-firebase/auth'
 import { Envelope, Key, IdentificationCard } from 'phosphor-react-native'
+import { navigationRef as navigation } from '../routes/RootNavigation'
+import auth from '@react-native-firebase/auth'
 
-import { useRegisterUser } from '../Hooks/useRegisterUser'
+import { RegisterUser } from '../functions/RegisterUser'
 import { Button } from '../components/Button'
 import { Input } from '../components/Input'
 import Logo from '../assets/Relp_1.svg'
-import { navigationRef } from '../routes/RootNavigation'
 
 export function NewUser() {
-  const navigation = navigationRef
   const { colors } = useTheme()
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
@@ -26,16 +25,114 @@ export function NewUser() {
   const [password2, setPassword2] = useState('')
 
   async function handleNewUser() {
+    if (!email || !password || !name) {
+      setIsLoading(false)
+      return Alert.alert('Cadastro', 'Por favor insira seu Nome, Email e Senha')
+    } else if (password != password2) {
+      setIsLoading(false)
+      return Alert.alert('Senha', 'As senhas devem ser iguais')
+    }
+    /* //useEffect(() => {
+    const message = await RegisterUser(
+      email,
+      password,
+      password2,
+      name,
+      isLoading,
+      setIsLoading
+    )
+    console.log(RegisterUser)
+    return Alert.alert(message.message, `teste`)
+    //}, []) */
+    try {
+      setIsLoading(true)
+      await auth().createUserWithEmailAndPassword(email, password)
+      await auth().currentUser.updateProfile({ displayName: name })
+      Alert.alert(
+        'Sucesso!',
+        'Cadastro efetuado com sucesso! Efetue o login na tela principal com seu usuário recém-criado'
+      )
+      navigation.navigate('greeting')
+    } catch (e) {
+      console.log(e)
+      if (e.code === 'auth/email-already-in-use') {
+        setIsLoading(false)
+        return Alert.alert('Cadastro', 'E-mail já cadastrado!')
+      } else {
+        setIsLoading(false)
+        return Alert.alert('Cadastro', 'Não foi possível criar cadastro')
+      }
+    }
+  }
+  /* const isit = {
+      success: {
+        title: 'Sucesso!',
+        message: `Cadastro efetuado com sucesso! \nEfetue o login com seu usuário`
+      },
+      emailAlreadyRegistered: {
+        title: 'Cadastro',
+        message: 'E-mail já cadastrado'
+      },
+      genericError: {
+        title: 'Cadastro',
+        message: 'Não foi possível criar cadastro'
+      },
+      emptyFields: {
+        title: 'Cadastro',
+        message: 'Informe e-mail e senha.'
+      },
+      passwordsNotEqual: {
+        title: 'Senha',
+        message: 'As senhas devem ser iguais.'
+      }
+    }
+    setIsLoading(true)
+
     if (!email || !password) {
+      setIsLoading(false)
       return Alert.alert('Cadastro', 'Informe e-mail e senha.')
     }
     if (password != password2) {
+      setIsLoading(false)
       return Alert.alert('Senha', 'As senhas devem ser iguais.')
     }
 
-    useRegisterUser(email, password, name, setIsLoading)
+    Alert.alert(
+      hook === undefined
+        ? (isit.success.title, isit.success.message)
+        : hook.code === 'auth/email-already-in-use'
+        ? (isit.emailAlreadyRegistered.title,
+          isit.emailAlreadyRegistered.message)
+        : !email || !password
+        ? (isit.emptyFields.title, isit.emptyFields.message)
+        : password != password2
+        ? (isit.passwordsNotEqual.title, isit.passwordsNotEqual.message)
+        : (isit.genericError.title, isit.genericError.message)
+    )
+    if (hook === undefined)
+      return setIsLoading(false), navigation.navigate('greeting')
+    if (hook.code === 'auth/email-already-in-use') {
+      setIsLoading(false)
+    } else {
+      setIsLoading(false)
+    } */
 
-    /* try {
+  /* if (hook === undefined)
+      Alert.alert(
+        'Sucesso!',
+        'Cadastro efetuado com sucesso! Efetue o login com seu usuário recém-criado'
+      ),
+        navigation.navigate('greeting'),
+        setIsLoading(false)
+    if (hook.code === 'auth/email-already-in-use') {
+      setIsLoading(false)
+      return Alert.alert('Cadastro', 'E-mail já cadastrado!')
+    } else {
+      setIsLoading(false)
+      return Alert.alert('Cadastro', 'Não foi possível criar cadastro')
+    } */
+
+  /* try {
       setIsLoading(true)
       await auth().createUserWithEmailAndPassword(email, password)
       await auth().currentUser.updateProfile({ displayName: name })
@@ -50,7 +147,6 @@ export function NewUser() {
         Alert.alert('Cadastro', 'E-mail já cadastrado!')
       else Alert.alert('Cadastro', 'Não foi possível criar cadastro')
     } */
-  }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -117,7 +213,6 @@ export function NewUser() {
           onPress={handleNewUser}
           isLoading={isLoading}
         />
-        {/* </VStack> */}
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   )

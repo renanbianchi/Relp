@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Alert, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import { VStack, Select, CheckIcon } from 'native-base'
 import firestore from '@react-native-firebase/firestore'
-import { navigationRef } from '../routes/RootNavigation'
+import { navigationRef as navigation } from '../routes/RootNavigation'
 import auth from '@react-native-firebase/auth'
 
 import { Header } from '../components/Header'
@@ -16,7 +16,6 @@ export function Register() {
   const [asset, setAsset] = useState('')
   const [description, setDescription] = useState('')
 
-  const navigation = navigationRef
   const currentUser = auth().currentUser.uid
   const userName = auth().currentUser.displayName
 

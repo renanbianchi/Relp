@@ -5,11 +5,9 @@ import Hitwork from '../assets/Hitwork.svg'
 
 import Logo from '../assets/Relp_1.svg'
 import { Button } from '../components/Button'
-import * as RootNavigation from '../routes/RootNavigation'
+import { navigationRef as navigation } from '../routes/RootNavigation'
 
 export function Greeting() {
-  const navigation = RootNavigation
-
   function handleSignIn() {
     navigation.navigate('signin')
   }

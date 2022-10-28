@@ -2,20 +2,17 @@
   "expo": {
     "name": "relp",
     "slug": "relp",
+    "owner": "renanbianchi",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "plugins": [
-      "@react-native-firebase/app"
-    ],
+    "assetBundlePatterns": ["**/*"],
+    "plugins": ["@react-native-firebase/app", "expo-notifications"],
     "android": {
       "package": "com.relp",
-      "googleServicesFile": "./google-services.json" 
+      "googleServicesFile": "./google-services.json"
     },
     "ios": {
       "bundleIdentifier": "com.relp",
-      "googleServicesFile": "./GoogleService-info.plist" 
+      "googleServicesFile": "./GoogleService-info.plist"
     }
   }
 }

@@ -9,12 +9,13 @@ import {
 import { Heading, Icon, useTheme, VStack } from 'native-base'
 import { Envelope, Key } from 'phosphor-react-native'
 import auth from '@react-native-firebase/auth'
+import { navigationRef as navigation } from '../routes/RootNavigation'
 
 import Logo from '../assets/Relp_1.svg'
 import { Input } from '../components/Input'
 import { Button } from '../components/Button'
 
-export function SignIn({ navigation }) {
+export function SignIn() {
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')

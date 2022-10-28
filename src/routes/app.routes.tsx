@@ -1,7 +1,7 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import * as Notifications from 'expo-notifications'
 
-import { Routes } from '.'
 import { Home } from '../screens/Home'
 import { Details } from '../screens/Details'
 import { Register } from '../screens/Register'

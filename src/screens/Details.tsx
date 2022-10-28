@@ -10,7 +10,7 @@ import {
   CheckIcon
 } from 'native-base'
 import { useRoute } from '@react-navigation/native'
-import { navigationRef } from '../routes/RootNavigation'
+import { navigationRef as navigation } from '../routes/RootNavigation'
 import firestore from '@react-native-firebase/firestore'
 import auth from '@react-native-firebase/auth'
 import {
@@ -51,7 +51,6 @@ export function Details() {
   const route = useRoute()
   const { orderId } = route.params as RouteParams
   const { colors } = useTheme()
-  const navigation = navigationRef
 
   function handleOrderClose() {
     firestore()

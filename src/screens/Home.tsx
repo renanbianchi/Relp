@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Alert } from 'react-native'
 import firestore from '@react-native-firebase/firestore'
 import { SignOut, ChatTeardropText, User } from 'phosphor-react-native'
-import { navigationRef } from '../routes/RootNavigation'
+import { navigationRef as navigation } from '../routes/RootNavigation'
 import {
   HStack,
   VStack,
@@ -25,7 +25,6 @@ import { Loading } from '../components/Loading'
 export function Home() {
   const userName = auth().currentUser.displayName
   const isAdmin = auth().currentUser.uid === 'ZikI2M5od3hjgY1S7IAv9sCp3TH2'
-  const navigation = navigationRef
   const [orders, setOrders] = useState<OrderProps[]>([])
   const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>(
     'open'
@@ -156,7 +155,7 @@ export function Home() {
               />
             )}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: 50 }}
+            contentContainerStyle={{ paddingBottom: 10 }}
             ListEmptyComponent={() => (
               <Center>
                 <ChatTeardropText color={colors.gray[300]} size={40} />
@@ -171,8 +170,7 @@ export function Home() {
             )}
           />
         )}
-
-        <Button title="Nova solicitação" onPress={handleNewOrder} />
+        <Button mt={2} title="Nova solicitação" onPress={handleNewOrder} />
       </VStack>
     </VStack>
   )
