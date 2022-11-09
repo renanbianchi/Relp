@@ -10,4 +10,5 @@ export type OrderFirestoreDTO = {
   priority: string
   userId?: string
   createdBy?: string
+  pushId?: string
 }

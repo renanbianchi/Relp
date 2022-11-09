@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Alert, Keyboard, TouchableWithoutFeedback } from 'react-native'
-import { VStack, Select, CheckIcon } from 'native-base'
+import { VStack } from 'native-base'
 import firestore from '@react-native-firebase/firestore'
 import { navigationRef as navigation } from '../routes/RootNavigation'
 import auth from '@react-native-firebase/auth'
@@ -16,7 +16,7 @@ export function Register() {
   const [isLoading, setIsLoading] = useState(false)
   const [asset, setAsset] = useState('')
   const [description, setDescription] = useState('')
-  const [array, setArray] = useState('')
+  const [array, setArray] = useState([])
 
   const currentUser = auth().currentUser.uid
   const userName = auth().currentUser.displayName
@@ -28,10 +28,10 @@ export function Register() {
       console.log(array)
     })
   }, [])
-
-  function handleNewOrderRegister() {
+  async function handleNewOrderRegister() {
+    const { userId } = await OneSignal.getDeviceState()
     const notificationObj = {
-      contents: { en: 'Nova Solicitação' },
+      contents: { en: 'Admin, há uma nova requisição feita por um usuário' },
       include_player_ids: array
     }
 
@@ -47,6 +47,7 @@ export function Register() {
       .collection('orders')
       .add({
         asset,
+        pushId: [userId],
         description,
         status: 'open',
         priority,

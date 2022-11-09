@@ -23,6 +23,7 @@ export type OrderProps = {
   priority: string
   userId: string
   createdBy: string
+  pushId: string
 }
 
 type Props = IPressableProps & {

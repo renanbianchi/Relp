@@ -19,6 +19,7 @@ import {
   DesktopTower,
   ClipboardText
 } from 'phosphor-react-native'
+import OneSignal from 'react-native-onesignal'
 
 import { Header } from '../components/Header'
 import { OrderProps } from '../components/Order'
@@ -46,13 +47,23 @@ export function Details() {
   const isAdmin = auth().currentUser.uid === 'ZikI2M5od3hjgY1S7IAv9sCp3TH2'
   const [isLoading, setIsLoading] = useState(true)
   const [solution, setSolution] = useState('')
-  const [priority, setPriority] = useState('')
+  const [priority, setPriority] = useState('baixa')
   const [order, setOrder] = useState<OrderDetails>({} as OrderDetails)
   const route = useRoute()
   const { orderId } = route.params as RouteParams
   const { colors } = useTheme()
 
   function handleOrderClose() {
+    const notificationObj = {
+      contents: {
+        en: `${
+          order.createdBy ? order.createdBy : `usuário`
+        }, sua requisição foi atualizada`
+      },
+      include_player_ids: order.pushId
+    }
+    const jsonString = JSON.stringify(notificationObj)
+
     firestore()
       .collection<OrderFirestoreDTO>('orders')
       .doc(orderId)
@@ -63,6 +74,16 @@ export function Details() {
         closed_at: firestore.FieldValue.serverTimestamp()
       })
       .then(() => {
+        OneSignal.postNotification(
+          jsonString,
+          success => {
+            console.log('Success:', success)
+          },
+          error => {
+            console.log('Error:', error)
+          }
+        )
+
         solution === ''
           ? Alert.alert(
               'Solicitação',
@@ -84,6 +105,7 @@ export function Details() {
       .get()
       .then(doc => {
         const {
+          pushId,
           asset,
           description,
           status,
@@ -99,6 +121,7 @@ export function Details() {
 
         setOrder({
           id: doc.id,
+          pushId,
           userId,
           asset,
           description,

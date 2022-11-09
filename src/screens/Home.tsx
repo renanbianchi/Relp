@@ -66,6 +66,7 @@ export function Home() {
     const subscriber = fetch.onSnapshot(snapshot => {
       const data = snapshot.docs.map(doc => {
         const {
+          pushId,
           asset,
           description,
           status,
@@ -77,6 +78,7 @@ export function Home() {
         } = doc.data()
 
         return {
+          pushId,
           id: doc.id,
           asset,
           description,

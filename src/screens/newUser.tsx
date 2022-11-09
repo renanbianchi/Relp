@@ -57,7 +57,6 @@ export function NewUser() {
               .collection('users')
               .doc('admin')
               .update(`admin`, increment)
-            OneSignal.sendTag(`Admin`, `true`)
             navigation.navigate('greeting')
             Alert.alert(
               'Sucesso!',
@@ -68,7 +67,10 @@ export function NewUser() {
         {
           text: 'Usuário',
           onPress: () => {
-            OneSignal.sendTag(`Admin`, `false`)
+            firestore()
+              .collection('users')
+              .doc('users')
+              .update(`users`, increment)
             navigation.navigate('greeting')
             Alert.alert(
               'Sucesso!',
