@@ -6,12 +6,16 @@ import {
   Platform,
   TouchableWithoutFeedback
 } from 'react-native'
+
+import OneSignal from 'react-native-onesignal'
 import { useTheme, Heading, Icon } from 'native-base'
 import { Envelope, Key, IdentificationCard } from 'phosphor-react-native'
+import firestore from '@react-native-firebase/firestore'
+import firebase from '@react-native-firebase/app'
+
 import { navigationRef as navigation } from '../routes/RootNavigation'
 import auth from '@react-native-firebase/auth'
 
-import { RegisterUser } from '../functions/RegisterUser'
 import { Button } from '../components/Button'
 import { Input } from '../components/Input'
 import Logo from '../assets/Relp_1.svg'
@@ -25,6 +29,8 @@ export function NewUser() {
   const [password2, setPassword2] = useState('')
 
   async function handleNewUser() {
+    const { userId } = await OneSignal.getDeviceState()
+    const increment = firebase.firestore.FieldValue.arrayUnion(userId)
     if (!email || !password || !name) {
       setIsLoading(false)
       return Alert.alert('Cadastro', 'Por favor insira seu Nome, Email e Senha')
@@ -32,27 +38,45 @@ export function NewUser() {
       setIsLoading(false)
       return Alert.alert('Senha', 'As senhas devem ser iguais')
     }
-    /* //useEffect(() => {
-    const message = await RegisterUser(
-      email,
-      password,
-      password2,
-      name,
-      isLoading,
-      setIsLoading
-    )
-    console.log(RegisterUser)
-    return Alert.alert(message.message, `teste`)
-    //}, []) */
+
     try {
       setIsLoading(true)
       await auth().createUserWithEmailAndPassword(email, password)
-      await auth().currentUser.updateProfile({ displayName: name })
-      Alert.alert(
-        'Sucesso!',
-        'Cadastro efetuado com sucesso! Efetue o login na tela principal com seu usuário recém-criado'
-      )
-      navigation.navigate('greeting')
+      await auth().currentUser.updateProfile({
+        displayName: name
+      })
+
+      OneSignal.setExternalUserId(name)
+      OneSignal.setEmail(email)
+
+      Alert.alert('Usuário', 'Defina seu tipo de usuário', [
+        {
+          text: 'Admin',
+          onPress: () => {
+            firestore()
+              .collection('users')
+              .doc('admin')
+              .update(`admin`, increment)
+            OneSignal.sendTag(`Admin`, `true`)
+            navigation.navigate('greeting')
+            Alert.alert(
+              'Sucesso!',
+              'Cadastro efetuado com sucesso! Efetue o login na tela principal com seu usuário recém-criado'
+            )
+          }
+        },
+        {
+          text: 'Usuário',
+          onPress: () => {
+            OneSignal.sendTag(`Admin`, `false`)
+            navigation.navigate('greeting')
+            Alert.alert(
+              'Sucesso!',
+              'Cadastro efetuado com sucesso! Efetue o login na tela principal com seu usuário recém-criado'
+            )
+          }
+        }
+      ])
     } catch (e) {
       console.log(e)
       if (e.code === 'auth/email-already-in-use') {
@@ -160,7 +184,7 @@ export function NewUser() {
           justifyContent: 'center',
           marginBottom: 0
         }}
-        keyboardVerticalOffset={50}
+        keyboardVerticalOffset={-50}
       >
         <Logo width={110} height={110} />
         <Heading color="gray.100" fontSize="xl" mt={10} mb={6}>
@@ -206,6 +230,16 @@ export function NewUser() {
             <Icon as={<Key color={colors.gray[300]} />} ml={4} />
           }
         />
+        {/* <Heading color="gray.100" fontSize="xl">
+          Defina seu tipo de usuário
+        </Heading>
+        <Checkbox
+          value="teste"
+          onChange={setisAdmin}
+          _text={{ color: `gray.300` }}
+        >
+          Administrador
+        </Checkbox> */}
 
         <Button
           title="Criar cadastro"

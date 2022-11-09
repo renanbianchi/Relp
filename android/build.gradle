@@ -11,6 +11,7 @@ buildscript {
         if (findProperty('android.kotlinVersion')) {
             kotlinVersion = findProperty('android.kotlinVersion')
         }
+        else kotlinVersion = '1.6.0'
         frescoVersion = findProperty('expo.frescoVersion') ?: '2.5.0'
 
         if (System.properties['os.arch'] == 'aarch64') {

@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Alert, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import { VStack, Select, CheckIcon } from 'native-base'
 import firestore from '@react-native-firebase/firestore'
 import { navigationRef as navigation } from '../routes/RootNavigation'
 import auth from '@react-native-firebase/auth'
+import OneSignal from 'react-native-onesignal'
 
 import { Header } from '../components/Header'
 import { Input } from '../components/Input'
@@ -15,11 +16,27 @@ export function Register() {
   const [isLoading, setIsLoading] = useState(false)
   const [asset, setAsset] = useState('')
   const [description, setDescription] = useState('')
+  const [array, setArray] = useState('')
 
   const currentUser = auth().currentUser.uid
   const userName = auth().currentUser.displayName
+  const admins = firestore().collection('users').doc('admin')
+
+  useEffect(() => {
+    admins.get().then(querySnapshot => {
+      setArray(querySnapshot.data().admin)
+      console.log(array)
+    })
+  }, [])
 
   function handleNewOrderRegister() {
+    const notificationObj = {
+      contents: { en: 'Nova Solicitação' },
+      include_player_ids: array
+    }
+
+    const jsonString = JSON.stringify(notificationObj)
+
     if (!asset || !description) {
       Alert.alert('Registrar', 'Preencha todos os campos.')
     }
@@ -39,6 +56,15 @@ export function Register() {
       })
 
       .then(() => {
+        OneSignal.postNotification(
+          jsonString,
+          success => {
+            console.log('Success:', success)
+          },
+          error => {
+            console.log('Error:', error)
+          }
+        )
         Alert.alert('Solicitação', 'Solicitação registrada com sucesso!')
         navigation.goBack()
       })
