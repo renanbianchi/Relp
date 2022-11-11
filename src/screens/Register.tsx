@@ -16,18 +16,19 @@ export function Register() {
   const [isLoading, setIsLoading] = useState(false)
   const [asset, setAsset] = useState('')
   const [description, setDescription] = useState('')
-  const [array, setArray] = useState([])
+  const [array, setArray] = useState('')
 
   const currentUser = auth().currentUser.uid
   const userName = auth().currentUser.displayName
-  const admins = firestore().collection('users').doc('admin')
+  const admins = firestore().collection('users').doc('oneSignalAdminId')
 
   useEffect(() => {
     admins.get().then(querySnapshot => {
-      setArray(querySnapshot.data().admin)
+      setArray(querySnapshot.data().adminlist)
       console.log(array)
     })
   }, [])
+
   async function handleNewOrderRegister() {
     const { userId } = await OneSignal.getDeviceState()
     const notificationObj = {

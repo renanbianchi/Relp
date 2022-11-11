@@ -6,7 +6,7 @@ export declare global {
       new: undefined
       signin: undefined
       newuser: undefined
-      details: { orderId: string }
+      details: { orderId: string, isAdmin: boolean }
     }
   }
 }

@@ -34,6 +34,7 @@ import { Selector } from '../components/Selector'
 
 type RouteParams = {
   orderId: string
+  isAdmin: boolean
 }
 
 type OrderDetails = OrderProps & {
@@ -44,21 +45,20 @@ type OrderDetails = OrderProps & {
 }
 
 export function Details() {
-  const isAdmin = auth().currentUser.uid === 'ZikI2M5od3hjgY1S7IAv9sCp3TH2'
   const [isLoading, setIsLoading] = useState(true)
   const [solution, setSolution] = useState('')
   const [priority, setPriority] = useState('baixa')
   const [order, setOrder] = useState<OrderDetails>({} as OrderDetails)
   const route = useRoute()
-  const { orderId } = route.params as RouteParams
+  const { orderId, isAdmin } = route.params as RouteParams
   const { colors } = useTheme()
 
   function handleOrderClose() {
     const notificationObj = {
       contents: {
         en: `${
-          order.createdBy ? order.createdBy : `usuário`
-        }, sua requisição foi atualizada`
+          order.createdBy ? order.createdBy : `Usuário`
+        }, sua requisição foi atualizada.`
       },
       include_player_ids: order.pushId
     }

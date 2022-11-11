@@ -30,7 +30,7 @@ export function NewUser() {
 
   async function handleNewUser() {
     const { userId } = await OneSignal.getDeviceState()
-    const increment = firebase.firestore.FieldValue.arrayUnion(userId)
+    const oneSignalAdminId = firebase.firestore.FieldValue.arrayUnion(userId)
     if (!email || !password || !name) {
       setIsLoading(false)
       return Alert.alert('Cadastro', 'Por favor insira seu Nome, Email e Senha')
@@ -55,8 +55,17 @@ export function NewUser() {
           onPress: () => {
             firestore()
               .collection('users')
-              .doc('admin')
-              .update(`admin`, increment)
+              .doc('oneSignalAdminId')
+              .update(`adminlist`, oneSignalAdminId),
+              firestore()
+                .collection('users')
+                .doc('firestoreAdminId')
+                .update(
+                  'adminlist',
+                  firebase.firestore.FieldValue.arrayUnion(
+                    auth().currentUser.uid
+                  )
+                )
             navigation.navigate('greeting')
             Alert.alert(
               'Sucesso!',
@@ -67,10 +76,6 @@ export function NewUser() {
         {
           text: 'Usuário',
           onPress: () => {
-            firestore()
-              .collection('users')
-              .doc('users')
-              .update(`users`, increment)
             navigation.navigate('greeting')
             Alert.alert(
               'Sucesso!',
@@ -90,89 +95,6 @@ export function NewUser() {
       }
     }
   }
-  /* const isit = {
-      success: {
-        title: 'Sucesso!',
-        message: `Cadastro efetuado com sucesso! \nEfetue o login com seu usuário`
-      },
-      emailAlreadyRegistered: {
-        title: 'Cadastro',
-        message: 'E-mail já cadastrado'
-      },
-      genericError: {
-        title: 'Cadastro',
-        message: 'Não foi possível criar cadastro'
-      },
-      emptyFields: {
-        title: 'Cadastro',
-        message: 'Informe e-mail e senha.'
-      },
-      passwordsNotEqual: {
-        title: 'Senha',
-        message: 'As senhas devem ser iguais.'
-      }
-    }
-    setIsLoading(true)
-
-    if (!email || !password) {
-      setIsLoading(false)
-      return Alert.alert('Cadastro', 'Informe e-mail e senha.')
-    }
-    if (password != password2) {
-      setIsLoading(false)
-      return Alert.alert('Senha', 'As senhas devem ser iguais.')
-    }
-
-    Alert.alert(
-      hook === undefined
-        ? (isit.success.title, isit.success.message)
-        : hook.code === 'auth/email-already-in-use'
-        ? (isit.emailAlreadyRegistered.title,
-          isit.emailAlreadyRegistered.message)
-        : !email || !password
-        ? (isit.emptyFields.title, isit.emptyFields.message)
-        : password != password2
-        ? (isit.passwordsNotEqual.title, isit.passwordsNotEqual.message)
-        : (isit.genericError.title, isit.genericError.message)
-    )
-    if (hook === undefined)
-      return setIsLoading(false), navigation.navigate('greeting')
-    if (hook.code === 'auth/email-already-in-use') {
-      setIsLoading(false)
-    } else {
-      setIsLoading(false)
-    } */
-
-  /* if (hook === undefined)
-      Alert.alert(
-        'Sucesso!',
-        'Cadastro efetuado com sucesso! Efetue o login com seu usuário recém-criado'
-      ),
-        navigation.navigate('greeting'),
-        setIsLoading(false)
-    if (hook.code === 'auth/email-already-in-use') {
-      setIsLoading(false)
-      return Alert.alert('Cadastro', 'E-mail já cadastrado!')
-    } else {
-      setIsLoading(false)
-      return Alert.alert('Cadastro', 'Não foi possível criar cadastro')
-    } */
-
-  /* try {
-      setIsLoading(true)
-      await auth().createUserWithEmailAndPassword(email, password)
-      await auth().currentUser.updateProfile({ displayName: name })
-      Alert.alert(
-        'Sucesso!',
-        'Cadastro efetuado com sucesso! Efetue o login na tela principal com seu usuário recém-criado'
-      )
-      navigation.navigate('greeting')
-    } catch (e) {
-      console.log(e)
-      if (e.code === 'auth/email-already-in-use')
-        Alert.alert('Cadastro', 'E-mail já cadastrado!')
-      else Alert.alert('Cadastro', 'Não foi possível criar cadastro')
-    } */
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

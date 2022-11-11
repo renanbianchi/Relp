@@ -23,29 +23,28 @@ import { dateFormat } from '../utils/firestoreDateFormat'
 import { Loading } from '../components/Loading'
 
 export function Home() {
+  const currentUser = auth().currentUser.uid
+  const [adminList, setAdminList] = useState([])
+  const admins = firestore().collection('users').doc('firestoreAdminId')
   const userName = auth().currentUser.displayName
-  const isAdmin = auth().currentUser.uid === 'ZikI2M5od3hjgY1S7IAv9sCp3TH2'
+
+  const [isAdmin, setisAdmin] = useState(false)
+  //const [fetch, setFetch] = useState(undefined)
   const [orders, setOrders] = useState<OrderProps[]>([])
   const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>(
     'open'
   )
   const [isloading, setIsLoading] = useState(true)
+  const db = firestore().collection('orders')
 
   const { colors } = useTheme()
-
-  const db = firestore().collection('orders')
-  const fetch = isAdmin
-    ? db.where('status', '==', statusSelected)
-    : db
-        .where('status', '==', statusSelected)
-        .where('userId', '==', auth().currentUser.uid)
 
   function handleNewOrder() {
     navigation.navigate('new')
   }
 
-  function handleOpenDetails(orderId: string) {
-    navigation.navigate('details', { orderId })
+  function handleOpenDetails(orderId: string, isAdmin: boolean) {
+    navigation.navigate('details', { orderId, isAdmin })
   }
 
   function handleLogout() {
@@ -62,6 +61,17 @@ export function Home() {
 
   useEffect(() => {
     setIsLoading(true)
+
+    admins.get().then(querySnapshot => {
+      setAdminList(querySnapshot.data().adminlist)
+      setisAdmin(adminList.includes(currentUser))
+    })
+
+    const fetch = isAdmin
+      ? db.where('status', '==', statusSelected)
+      : db
+          .where('status', '==', statusSelected)
+          .where('userId', '==', auth().currentUser.uid)
 
     const subscriber = fetch.onSnapshot(snapshot => {
       const data = snapshot.docs.map(doc => {
@@ -125,7 +135,6 @@ export function Home() {
           <Heading color="gray.100">Solicitações</Heading>
           <Text color="gray.200">{orders.length}</Text>
         </HStack>
-
         <HStack space={3} mb={8} size="sm">
           <Filter
             type="open"
@@ -153,7 +162,7 @@ export function Home() {
               <Order
                 isAdmin={isAdmin}
                 data={item}
-                onPress={() => handleOpenDetails(item.id)}
+                onPress={() => handleOpenDetails(item.id, isAdmin)}
               />
             )}
             showsVerticalScrollIndicator={false}
@@ -172,7 +181,9 @@ export function Home() {
             )}
           />
         )}
-        <Button mt={2} title="Nova solicitação" onPress={handleNewOrder} />
+        {isAdmin ? null : (
+          <Button mt={2} title="Nova solicitação" onPress={handleNewOrder} />
+        )}
       </VStack>
     </VStack>
   )
