@@ -24,11 +24,10 @@ import { Loading } from '../components/Loading'
 
 export function Home() {
   const currentUser = auth().currentUser.uid
-  const [adminList, setAdminList] = useState([])
   const admins = firestore().collection('users').doc('firestoreAdminId')
   const userName = auth().currentUser.displayName
 
-  const [isAdmin, setisAdmin] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
   //const [fetch, setFetch] = useState(undefined)
   const [orders, setOrders] = useState<OrderProps[]>([])
   const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>(
@@ -60,50 +59,57 @@ export function Home() {
   }
 
   useEffect(() => {
-    setIsLoading(true)
+    let unsubscriber
 
-    admins.get().then(querySnapshot => {
-      setAdminList(querySnapshot.data().adminlist)
-      setisAdmin(adminList.includes(currentUser))
-    })
+    const getOrders = async () => {
+      setIsLoading(true)
 
-    const fetch = isAdmin
-      ? db.where('status', '==', statusSelected)
-      : db
-          .where('status', '==', statusSelected)
-          .where('userId', '==', auth().currentUser.uid)
+      const adminListQuerySnapshot = await admins.get()
+      const adminList = adminListQuerySnapshot.data().adminlist
+      const adminCheck = adminList.includes(currentUser)
 
-    const subscriber = fetch.onSnapshot(snapshot => {
-      const data = snapshot.docs.map(doc => {
-        const {
-          pushId,
-          asset,
-          description,
-          status,
-          created_at,
-          priority,
-          userId,
-          createdBy,
-          isAdmin
-        } = doc.data()
+      setIsAdmin(adminCheck)
 
-        return {
-          pushId,
-          id: doc.id,
-          asset,
-          description,
-          status,
-          when: dateFormat(created_at),
-          priority,
-          userId,
-          createdBy,
-          isAdmin
-        }
+      const fetch = adminCheck
+        ? db.where('status', '==', statusSelected)
+        : db
+            .where('status', '==', statusSelected)
+            .where('userId', '==', auth().currentUser.uid)
+
+      unsubscriber = fetch.onSnapshot(snapshot => {
+        const newOrders = snapshot.docs.map(doc => {
+          const {
+            pushId,
+            asset,
+            description,
+            status,
+            created_at,
+            priority,
+            userId,
+            createdBy
+          } = doc.data()
+
+          return {
+            pushId,
+            id: doc.id,
+            asset,
+            description,
+            status,
+            when: dateFormat(created_at),
+            priority,
+            userId,
+            createdBy
+          }
+        })
+
+        setOrders(newOrders)
+        setIsLoading(false)
       })
-      setOrders(data)
-      setIsLoading(false)
-    })
-    return subscriber
+    }
+
+    getOrders()
+
+    return unsubscriber
   }, [statusSelected])
 
   return (

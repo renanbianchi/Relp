@@ -1,6 +1,5 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import * as Notifications from 'expo-notifications'
 
 import { Home } from '../screens/Home'
 import { Details } from '../screens/Details'
@@ -11,10 +10,10 @@ import { SignIn } from '../screens/SignIn'
 
 const { Navigator, Screen } = createNativeStackNavigator()
 
-export function AppRoutes(Routes: any) {
+export function AppRoutes(user: any) {
   return (
     <Navigator
-      initialRouteName={Routes.user ? 'home' : 'greeting'}
+      initialRouteName={user ? 'home' : 'greeting'}
       screenOptions={{ headerShown: false }}
     >
       <Screen name="home" component={Home} />

@@ -24,7 +24,7 @@ export function Routes() {
 
   return (
     <NavigationContainer ref={navigationRef}>
-      <AppRoutes />
+      <AppRoutes user={user} />
     </NavigationContainer>
   )
 }
