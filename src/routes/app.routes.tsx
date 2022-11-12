@@ -13,15 +13,15 @@ const { Navigator, Screen } = createNativeStackNavigator()
 export function AppRoutes(user: any) {
   return (
     <Navigator
-      initialRouteName={user ? 'home' : 'greeting'}
+      initialRouteName={user === null ? 'greeting' : 'home'}
       screenOptions={{ headerShown: false }}
     >
-      <Screen name="home" component={Home} />
-      <Screen name="details" component={Details} />
-      <Screen name="new" component={Register} />
       <Screen name="greeting" component={Greeting} />
       <Screen name="newuser" component={NewUser} />
       <Screen name="signin" component={SignIn} />
+      <Screen name="home" component={Home} />
+      <Screen name="details" component={Details} />
+      <Screen name="new" component={Register} />
     </Navigator>
   )
 }

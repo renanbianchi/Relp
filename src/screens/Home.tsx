@@ -124,6 +124,9 @@ export function Home() {
         px={6}
       >
         <Logo />
+        <Text fontSize={'md'} ml={'12'} color="gray.100">
+          Olá, {userName}
+        </Text>
         <IconButton
           icon={<SignOut size={26} color={colors.gray[300]} />}
           onPress={handleLogout}
@@ -179,9 +182,7 @@ export function Home() {
                 <Text color="gray.300" fontSize="xl" mt={6} textAlign="center">
                   {' '}
                   Você ainda não possui {'\n'} Solicitações{' '}
-                  {statusSelected === 'open'
-                    ? `em andamento, ${userName}`
-                    : 'finalizadas'}{' '}
+                  {statusSelected === 'open' ? `em andamento` : 'finalizadas'}{' '}
                 </Text>
               </Center>
             )}

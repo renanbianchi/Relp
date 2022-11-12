@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import auth from '@react-native-firebase/auth'
 import { navigationRef as navigation } from '../routes/RootNavigation'
@@ -43,7 +43,8 @@ export async function RegisterUser(
     if (!email || !password || !name) {
       setIsLoading(false)
       setMessage(
-        messages.emptyFields.title //, messages.emptyFields.message
+        `${messages.emptyFields.title}`,
+        `${messages.emptyFields.message}`
       )
       return { message, isLoading }
     }

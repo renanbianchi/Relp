@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   Alert,
   Keyboard,
@@ -33,7 +33,10 @@ export function NewUser() {
     const oneSignalAdminId = firebase.firestore.FieldValue.arrayUnion(userId)
     if (!email || !password || !name) {
       setIsLoading(false)
-      return Alert.alert('Cadastro', 'Por favor insira seu Nome, Email e Senha')
+      return Alert.alert(
+        'Cadastro',
+        'Por favor insira seu Nome de usuário, Email e Senha'
+      )
     } else if (password != password2) {
       setIsLoading(false)
       return Alert.alert('Senha', 'As senhas devem ser iguais')
@@ -117,6 +120,7 @@ export function NewUser() {
 
         <Input
           placeholder="Nome de Usuário"
+          maxLength={14}
           mb={4}
           onChangeText={setName}
           isDisabled={isLoading}
@@ -154,16 +158,6 @@ export function NewUser() {
             <Icon as={<Key color={colors.gray[300]} />} ml={4} />
           }
         />
-        {/* <Heading color="gray.100" fontSize="xl">
-          Defina seu tipo de usuário
-        </Heading>
-        <Checkbox
-          value="teste"
-          onChange={setisAdmin}
-          _text={{ color: `gray.300` }}
-        >
-          Administrador
-        </Checkbox> */}
 
         <Button
           title="Criar cadastro"
