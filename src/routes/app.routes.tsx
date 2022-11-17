@@ -10,10 +10,10 @@ import { SignIn } from '../screens/SignIn'
 
 const { Navigator, Screen } = createNativeStackNavigator()
 
-export function AppRoutes(user: any) {
+export function AppRoutes(user) {
   return (
     <Navigator
-      initialRouteName={user === null ? 'greeting' : 'home'}
+      initialRouteName={user ? 'greeting' : 'home'}
       screenOptions={{ headerShown: false }}
     >
       <Screen name="greeting" component={Greeting} />

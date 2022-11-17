@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "693840537873",
-    "project_id": "rockethelp-2a682",
-    "storage_bucket": "rockethelp-2a682.appspot.com"
+    "project_number": "295333889668",
+    "project_id": "relp-01",
+    "storage_bucket": "relp-01.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:693840537873:android:95d5d3cfbec379827e84b0",
+        "mobilesdk_app_id": "1:295333889668:android:58c9a3bd351cedac28a4d1",
         "android_client_info": {
-          "package_name": "com.rockethelp"
+          "package_name": "com.relp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "693840537873-grq8htvjb7emrnhdpnbplb4nj5b5savc.apps.googleusercontent.com",
+          "client_id": "295333889668-bjmpve5jgkn446nnqipuqsjbj4irrglv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAEqKo-LYTxDYL5jkGOqmgWeeMvUYCybDY"
+          "current_key": "AIzaSyBVn16l3xdkbRYGy_SNRD3eXMliPTkTgxI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "693840537873-grq8htvjb7emrnhdpnbplb4nj5b5savc.apps.googleusercontent.com",
+              "client_id": "295333889668-bjmpve5jgkn446nnqipuqsjbj4irrglv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

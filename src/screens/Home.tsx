@@ -28,7 +28,6 @@ export function Home() {
   const userName = auth().currentUser.displayName
 
   const [isAdmin, setIsAdmin] = useState(false)
-  //const [fetch, setFetch] = useState(undefined)
   const [orders, setOrders] = useState<OrderProps[]>([])
   const [statusSelected, setStatusSelected] = useState<'open' | 'closed'>(
     'open'
@@ -59,7 +58,8 @@ export function Home() {
   }
 
   useEffect(() => {
-    let unsubscriber
+
+    let unsubscriber: any
 
     const getOrders = async () => {
       setIsLoading(true)

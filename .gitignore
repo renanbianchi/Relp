@@ -113,4 +113,9 @@ buck-out/
 web-build/
 dist/
 
+# Google Services
+google-services/
+
 # @end expo-cli
+google-services.json
+android/app/google-services.json
