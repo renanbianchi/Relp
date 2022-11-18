@@ -66,6 +66,7 @@ export function SignIn() {
           marginBottom: 0
         }}
       >
+        
         <Logo width={110} height={110} />
         <Heading color="gray.100" fontSize="xl" mt={'3'} mb={6}>
           Acesse sua conta

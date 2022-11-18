@@ -6,13 +6,10 @@ import {
   useTheme,
   ScrollView,
   Box,
-  Select,
-  CheckIcon
 } from 'native-base'
 import { useRoute } from '@react-navigation/native'
 import { navigationRef as navigation } from '../routes/RootNavigation'
 import firestore from '@react-native-firebase/firestore'
-import auth from '@react-native-firebase/auth'
 import {
   CircleWavyCheck,
   Hourglass,

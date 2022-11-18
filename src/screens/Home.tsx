@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Alert } from 'react-native'
 import firestore from '@react-native-firebase/firestore'
+import auth from '@react-native-firebase/auth'
 import { SignOut, ChatTeardropText, User } from 'phosphor-react-native'
 import { navigationRef as navigation } from '../routes/RootNavigation'
 import {
@@ -13,7 +14,6 @@ import {
   FlatList,
   Center
 } from 'native-base'
-import auth from '@react-native-firebase/auth'
 
 import Logo from '../assets/Relp_2.svg'
 import { Filter } from '../components/Filter'
@@ -58,7 +58,6 @@ export function Home() {
   }
 
   useEffect(() => {
-
     let unsubscriber: any
 
     const getOrders = async () => {
