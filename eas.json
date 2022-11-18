@@ -6,15 +6,18 @@
     "development": {
       "distribution": "internal",
       "android": {
-        "buildtype": "apk",
-        "gradleCommand": ":app:assembleRelease",
-        "developmentClient": true
+        "gradleCommand": ":app:assembleDebug"
       },
       "ios": {
         "buildConfiguration": "Debug"
       }
     },
     "preview": {
+      "android": {
+        "buildtype": "apk",
+        "gradleCommand": ":app:assembleRelease"
+      },
+      "developmentClient": true,
       "distribution": "internal"
     },
     "production": {}
