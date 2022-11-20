@@ -13,7 +13,6 @@
       }
     },
     "preview": {
-      "env": { "GOOGLE_SERVICES_JSON": "public" },
       "android": {
         "buildType": "apk",
         "gradleCommand": ":app:assembleRelease"
