@@ -8,7 +8,7 @@
     "plugins": ["@react-native-firebase/app", "expo-notifications"],
     "android": {
       "package": "com.relp",
-      "googleServicesFile": "process.env.GOOGLE_SERVICES_JSON"
+      "googleServicesFile": "./google-services/Relp/google-services.json"
     },
     "extra": {
       "eas": {
